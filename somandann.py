@@ -37,10 +37,6 @@ pyl.show()
 mappings = som.win_map(X)
 frauds = np.concatenate((mappings[(8,1)], mappings[(6,8)]), axis = 0)
 frauds = sc.inverse_transform(frauds)
-
-print('Fraud Customer IDs')
-for i in frauds[:, 0]:
-  print(int(i))
   
 customers = dataset.iloc[:, 1:].values
 
@@ -55,11 +51,11 @@ customers = sc.fit_transform(customers)
 
 ann = Sequential()
 
-ann.add(Dense(units=2, activation='relu'))
-ann.add(Dense(units=1, activation='sigmoid'))
+ann.add(Dense(units=2, kernel_initializer='uniform', activation='relu'))
+ann.add(Dense(units=1, kernel_initializer='uniform', activation='sigmoid'))
 
 ann.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
-ann.fit(customers, is_fraud, batch_size = 1, epochs = 10)
+ann.fit(customers, is_fraud, batch_size = 1, epochs = 2)
 
 y_pred = ann.predict(customers)
 y_pred = np.concatenate((dataset.iloc[:, 0:1].values, y_pred), axis = 1)
